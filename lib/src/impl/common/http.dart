@@ -63,45 +63,6 @@ abstract class FirestoreHttpClient implements FirestoreClient {
     token = new FirestoreJsonAccessToken(result);
   }
 
-  @override
-  Future<List<Vehicle>> listVehicles() async {
-    var vehicles = <Vehicle>[];
-
-    var result = await getJsonList("vehicles");
-
-    for (var item in result) {
-      vehicles.add(new Vehicle(this, item));
-    }
-
-    return vehicles;
-  }
-
-  @override
-  Future<Vehicle> getVehicle(int id) async {
-    return new Vehicle(this, await getJsonMap("vehicles/${id}"));
-  }
-
-  @override
-  Future sendVehicleCommand(int vehicleId, String command,
-      {Map<String, dynamic> params}) async {
-    var result = await getJsonMap("vehicles/${vehicleId}/command/${command}",
-        body: params == null ? {} : params, extract: null);
-    if (result["response"] == false) {
-      var reason = result["reason"];
-      if (reason is String && reason.trim().isNotEmpty) {
-        throw new Exception("Failed to send command '${command}': ${reason}");
-      } else {
-        throw new Exception("Failed to send command '${command}'");
-      }
-    }
-  }
-
-  @override
-  Future<Vehicle> wake(int id) async {
-    return new Vehicle(
-        this, await getJsonMap("vehicles/${id}/wake_up", body: {}));
-  }
-
   Future<Map<String, dynamic>> getJsonMap(String url,
       {Map<String, dynamic> body,
       String extract: "response",

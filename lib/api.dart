@@ -11,4 +11,3 @@ part 'src/token.dart';
 part 'src/endpoints.dart';
 part 'src/types/object.dart';
 
-part 'src/types/vehicle.dart';

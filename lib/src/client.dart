@@ -19,12 +19,5 @@ abstract class FirestoreClient {
 
   Future login();
 
-  Future<List<Vehicle>> listVehicles();
-  Future<Vehicle> getVehicle(int id);
-
-  Future sendVehicleCommand(int id, String command,
-      {Map<String, dynamic> params});
-  Future<Vehicle> wake(int id);
-
   Future close();
 }
