@@ -5,8 +5,8 @@ import 'dart:async';
 import '../../api.dart';
 
 class FirestoreClientImpl implements FirestoreClient {
-  FirestoreClientImpl(String email, String password, FirestoreAccessToken token,
-      FirestoreApiEndpoints endpoints) {
+  FirestoreClientImpl(String email, String password, String apiKey,
+      FirestoreAccessToken token, FirestoreApiEndpoints endpoints) {
     throw "This platform is not supported.";
   }
 
@@ -20,21 +20,33 @@ class FirestoreClientImpl implements FirestoreClient {
   FirestoreAccessToken get token => throw "This platform is not supported.";
 
   @override
-  set token(FirestoreAccessToken token) => throw "This platform is not supported.";
+  set token(FirestoreAccessToken token) =>
+      throw "This platform is not supported.";
 
   @override
   bool get isAuthorized => throw "This platform is not supported.";
 
   @override
-  FirestoreApiEndpoints get endpoints => throw "This platform is not supported.";
+  FirestoreApiEndpoints get endpoints =>
+      throw "This platform is not supported.";
 
   @override
-  Future<Vehicle> getVehicle(int id) {
+  Future<Document> getDocument(int id) {
     throw "This platform is not supported.";
   }
 
   @override
-  Future<List<Vehicle>> listVehicles() {
+  Future<List<Document>> listDocuments(String path) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future<Collection> getCollection(int id) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future<List<Collection>> listCollection(String path) {
     throw "This platform is not supported.";
   }
 
@@ -44,18 +56,10 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future sendVehicleCommand(int id, String command,
-      {Map<String, dynamic> params}) {
-    throw "This platform is not supported.";
-  }
-
-  @override
-  Future<Vehicle> wake(int id) {
-    throw "This platform is not supported.";
-  }
-
-  @override
   Future close() {
     throw "This platform is not supported.";
   }
+
+  @override
+  String get apiKey => throw "This platform is not supported.";
 }

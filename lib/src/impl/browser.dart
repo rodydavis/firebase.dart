@@ -8,16 +8,15 @@ import '../../api.dart';
 import 'common/http.dart';
 
 class FirestoreClientImpl extends FirestoreHttpClient {
-  FirestoreClientImpl(String email, String password, FirestoreAccessToken token,
+  FirestoreClientImpl(String email, String password, String apiKey, FirestoreAccessToken token,
       FirestoreApiEndpoints endpoints)
-      : super(email, password, token, endpoints);
+      : super(email, password, apiKey, token, endpoints);
 
   @override
-  Future<dynamic> sendHttpRequest(String url,
+  Future<dynamic> sendHttpRequest(Uri uri,
       {bool needsToken: true,
       String extract,
       Map<String, dynamic> body}) async {
-    var uri = endpoints.firestoreUrl.resolve(url);
     var request = new HttpRequest();
     request.open(body == null ? "GET" : "POST", uri.toString());
     if (needsToken) {

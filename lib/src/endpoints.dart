@@ -6,25 +6,23 @@ abstract class FirestoreApiEndpoints {
   }
 
   Uri get firestoreUrl;
-  String get clientId;
-  String get clientSecret;
+  Uri getAuthUrl(String apiKey);
+  Uri getRefreshUrl(String apiKey);
   bool get enableProxyMode;
 }
 
 class FirestoreStandardApiEndpoints implements FirestoreApiEndpoints {
   @override
-  final Uri firestoreUrl = Uri.parse("https://firestore.googleapis.com/v1/projects/church-family/databases/(default)/documents/");
-
-  
-
-  @override
-  final String clientId =
-      "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384";
-
-  @override
-  final String clientSecret =
-      "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3";
+  final Uri firestoreUrl = Uri.parse(
 
   @override
   bool get enableProxyMode => false;
+
+  @override
+  Uri getAuthUrl(String apiKey) => Uri.parse(
+      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$apiKey');
+
+  @override
+  Uri getRefreshUrl(String apiKey) =>
+      Uri.parse('https://securetoken.googleapis.com/v1/token?key=$apiKey');
 }

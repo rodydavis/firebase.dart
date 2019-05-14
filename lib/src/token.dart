@@ -13,14 +13,16 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   FirestoreJsonAccessToken(this.json);
 
   final Map<String, dynamic> json;
-
+  String get displayName => json['displayName'] as String;
+  String get email => json['email'] as String;
+  String get kind => json['kind'] as String;
+  String get localId => json['localId'] as String;
+  bool get registered => json['registered'] as bool;
   int get expiresInSeconds => json["expires_in"] as int;
   int get createdAtEpochSeconds => json["created_at"] as int;
 
-  String get tokenType => json["token_type"];
-
   @override
-  String get accessToken => json["access_token"] as String;
+  String get accessToken => json["idToken"] as String;
 
   @override
   String get refreshToken => json["refresh_token"] as String;

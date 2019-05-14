@@ -1,7 +1,7 @@
 part of firestore_api;
 
-class Vehicle implements FirestoreObject {
-  Vehicle(this.client, this.json);
+class Document implements FirestoreObject {
+  Document(this.client, this.json);
 
   @override
   final FirestoreClient client;

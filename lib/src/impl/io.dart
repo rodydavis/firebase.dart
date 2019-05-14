@@ -17,21 +17,19 @@ HttpClient _createHttpClient() {
 }
 
 class FirestoreClientImpl extends FirestoreHttpClient {
-  FirestoreClientImpl(String email, String password, FirestoreAccessToken token,
-      FirestoreApiEndpoints endpoints,
+  FirestoreClientImpl(String email, String password, String apiKey,
+      FirestoreAccessToken token, FirestoreApiEndpoints endpoints,
       {HttpClient client})
       : this.client = client == null ? _createHttpClient() : client,
-        super(email, password, token, endpoints);
+        super(email, password, apiKey, token, endpoints);
 
   final HttpClient client;
 
   @override
-  Future<dynamic> sendHttpRequest(String url,
+  Future<dynamic> sendHttpRequest(Uri uri,
       {bool needsToken: true,
       String extract,
       Map<String, dynamic> body}) async {
-    var uri = endpoints.firestoreUrl.resolve(url);
-
     if (endpoints.enableProxyMode) {
       uri = uri.replace(queryParameters: {"__tesla": "api"});
     }
