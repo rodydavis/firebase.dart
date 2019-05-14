@@ -14,6 +14,7 @@ abstract class FirestoreApiEndpoints {
 class FirestoreStandardApiEndpoints implements FirestoreApiEndpoints {
   @override
   final Uri firestoreUrl = Uri.parse(
+      "https://firestore.googleapis.com/v1/projects/church-family/databases/(default)/documents/");
 
   @override
   bool get enableProxyMode => false;
