@@ -4,7 +4,7 @@ class Vehicle implements FirestoreObject {
   Vehicle(this.client, this.json);
 
   @override
-  final TeslaClient client;
+  final FirestoreClient client;
 
   @override
   final Map<String, dynamic> json;

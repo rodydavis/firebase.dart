@@ -1,21 +1,21 @@
 part of firestore_api;
 
-abstract class TeslaClient {
-  factory TeslaClient(String email, String password,
-      {TeslaApiEndpoints endpoints, TeslaAccessToken token}) {
-    return new TeslaClientImpl(email, password, token,
-        endpoints == null ? new TeslaApiEndpoints.standard() : endpoints);
+abstract class FirestoreClient {
+  factory FirestoreClient(String email, String password,
+      {FirestoreApiEndpoints endpoints, FirestoreAccessToken token}) {
+    return new FirestoreClientImpl(email, password, token,
+        endpoints == null ? new FirestoreApiEndpoints.standard() : endpoints);
   }
 
   String get email;
   String get password;
 
-  TeslaAccessToken get token;
-  set token(TeslaAccessToken token);
+  FirestoreAccessToken get token;
+  set token(FirestoreAccessToken token);
 
   bool get isAuthorized;
 
-  TeslaApiEndpoints get endpoints;
+  FirestoreApiEndpoints get endpoints;
 
   Future login();
 

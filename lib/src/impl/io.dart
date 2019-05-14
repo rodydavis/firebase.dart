@@ -12,13 +12,13 @@ final ContentType _jsonContentType =
 
 HttpClient _createHttpClient() {
   var client = new HttpClient();
-  client.userAgent = "Tesla.dart";
+  client.userAgent = "Firestore.dart";
   return client;
 }
 
-class TeslaClientImpl extends TeslaHttpClient {
-  TeslaClientImpl(String email, String password, TeslaAccessToken token,
-      TeslaApiEndpoints endpoints,
+class FirestoreClientImpl extends FirestoreHttpClient {
+  FirestoreClientImpl(String email, String password, FirestoreAccessToken token,
+      FirestoreApiEndpoints endpoints,
       {HttpClient client})
       : this.client = client == null ? _createHttpClient() : client,
         super(email, password, token, endpoints);
@@ -30,7 +30,7 @@ class TeslaClientImpl extends TeslaHttpClient {
       {bool needsToken: true,
       String extract,
       Map<String, dynamic> body}) async {
-    var uri = endpoints.ownersApiUrl.resolve(url);
+    var uri = endpoints.firestoreUrl.resolve(url);
 
     if (endpoints.enableProxyMode) {
       uri = uri.replace(queryParameters: {"__tesla": "api"});
@@ -38,7 +38,7 @@ class TeslaClientImpl extends TeslaHttpClient {
 
     var request =
         body == null ? await client.getUrl(uri) : await client.postUrl(uri);
-    request.headers.set("User-Agent", "Tesla.dart");
+    request.headers.set("User-Agent", "Firestore.dart");
     if (needsToken) {
       if (!isCurrentTokenValid(true)) {
         await login();

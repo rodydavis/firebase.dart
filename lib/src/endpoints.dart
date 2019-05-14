@@ -1,24 +1,21 @@
 part of firestore_api;
 
-abstract class TeslaApiEndpoints {
-  factory TeslaApiEndpoints.standard() {
-    return new TeslaStandardApiEndpoints();
+abstract class FirestoreApiEndpoints {
+  factory FirestoreApiEndpoints.standard() {
+    return new FirestoreStandardApiEndpoints();
   }
 
-  Uri get ownersApiUrl;
-  Uri get summonConnectUrl;
+  Uri get firestoreUrl;
   String get clientId;
   String get clientSecret;
   bool get enableProxyMode;
 }
 
-class TeslaStandardApiEndpoints implements TeslaApiEndpoints {
+class FirestoreStandardApiEndpoints implements FirestoreApiEndpoints {
   @override
-  final Uri ownersApiUrl = Uri.parse("https://owner-api.teslamotors.com/");
+  final Uri firestoreUrl = Uri.parse("https://firestore.googleapis.com/v1/projects/church-family/databases/(default)/documents/");
 
-  @override
-  final Uri summonConnectUrl =
-      Uri.parse("wss://streaming.vn.teslamotors.com/connect/");
+  
 
   @override
   final String clientId =

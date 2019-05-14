@@ -7,9 +7,9 @@ import 'dart:html';
 import '../../api.dart';
 import 'common/http.dart';
 
-class TeslaClientImpl extends TeslaHttpClient {
-  TeslaClientImpl(String email, String password, TeslaAccessToken token,
-      TeslaApiEndpoints endpoints)
+class FirestoreClientImpl extends FirestoreHttpClient {
+  FirestoreClientImpl(String email, String password, FirestoreAccessToken token,
+      FirestoreApiEndpoints endpoints)
       : super(email, password, token, endpoints);
 
   @override
@@ -17,7 +17,7 @@ class TeslaClientImpl extends TeslaHttpClient {
       {bool needsToken: true,
       String extract,
       Map<String, dynamic> body}) async {
-    var uri = endpoints.ownersApiUrl.resolve(url);
+    var uri = endpoints.firestoreUrl.resolve(url);
     var request = new HttpRequest();
     request.open(body == null ? "GET" : "POST", uri.toString());
     if (needsToken) {

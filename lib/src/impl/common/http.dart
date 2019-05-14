@@ -4,8 +4,8 @@ import 'dart:async';
 
 import '../../../api.dart';
 
-abstract class TeslaHttpClient implements TeslaClient {
-  TeslaHttpClient(this.email, this.password, this.token, this.endpoints);
+abstract class FirestoreHttpClient implements FirestoreClient {
+  FirestoreHttpClient(this.email, this.password, this.token, this.endpoints);
 
   @override
   final String email;
@@ -14,10 +14,10 @@ abstract class TeslaHttpClient implements TeslaClient {
   final String password;
 
   @override
-  final TeslaApiEndpoints endpoints;
+  final FirestoreApiEndpoints endpoints;
 
   @override
-  TeslaAccessToken token;
+  FirestoreAccessToken token;
 
   bool isCurrentTokenValid(bool refreshable) {
     if (token == null) {
@@ -47,7 +47,7 @@ abstract class TeslaHttpClient implements TeslaClient {
           },
           needsToken: false);
 
-      token = new TeslaJsonAccessToken(result);
+      token = new FirestoreJsonAccessToken(result);
       return;
     }
 
@@ -60,7 +60,7 @@ abstract class TeslaHttpClient implements TeslaClient {
         },
         needsToken: false);
 
-    token = new TeslaJsonAccessToken(result);
+    token = new FirestoreJsonAccessToken(result);
   }
 
   @override

@@ -4,9 +4,9 @@ import 'dart:async';
 
 import '../../api.dart';
 
-class TeslaClientImpl implements TeslaClient {
-  TeslaClientImpl(String email, String password, TeslaAccessToken token,
-      TeslaApiEndpoints endpoints) {
+class FirestoreClientImpl implements FirestoreClient {
+  FirestoreClientImpl(String email, String password, FirestoreAccessToken token,
+      FirestoreApiEndpoints endpoints) {
     throw "This platform is not supported.";
   }
 
@@ -17,16 +17,16 @@ class TeslaClientImpl implements TeslaClient {
   String get password => throw "This platform is not supported.";
 
   @override
-  TeslaAccessToken get token => throw "This platform is not supported.";
+  FirestoreAccessToken get token => throw "This platform is not supported.";
 
   @override
-  set token(TeslaAccessToken token) => throw "This platform is not supported.";
+  set token(FirestoreAccessToken token) => throw "This platform is not supported.";
 
   @override
   bool get isAuthorized => throw "This platform is not supported.";
 
   @override
-  TeslaApiEndpoints get endpoints => throw "This platform is not supported.";
+  FirestoreApiEndpoints get endpoints => throw "This platform is not supported.";
 
   @override
   Future<Vehicle> getVehicle(int id) {

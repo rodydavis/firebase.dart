@@ -1,6 +1,6 @@
 part of firestore_api;
 
 abstract class FirestoreObject {
-  TeslaClient get client;
+  FirestoreClient get client;
   Map<String, dynamic> get json;
 }

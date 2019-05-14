@@ -35,8 +35,8 @@ String _getEnvKey(List<String> possible) {
       "Expected environment variable '${possible.first}' to be present.");
 }
 
-TeslaClient getTeslaClient(
-    {String teslaUsername, String teslaPassword, TeslaApiEndpoints endpoints}) {
+FirestoreClient getFirestoreClient(
+    {String teslaUsername, String teslaPassword, FirestoreApiEndpoints endpoints}) {
   var email = teslaUsername ?? _getEnvKey(_emailEnvVars).trim();
   var password = teslaPassword ?? _getEnvKey(_passwordEnvVars);
 
@@ -49,5 +49,5 @@ TeslaClient getTeslaClient(
     password = password.substring(0, password.length - 1);
   }
 
-  return new TeslaClient(email, password, endpoints: endpoints);
+  return new FirestoreClient(email, password, endpoints: endpoints);
 }

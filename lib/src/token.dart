@@ -1,6 +1,6 @@
 part of firestore_api;
 
-abstract class TeslaAccessToken {
+abstract class FirestoreAccessToken {
   String get accessToken;
   String get refreshToken;
   DateTime get createdAt;
@@ -9,8 +9,8 @@ abstract class TeslaAccessToken {
   bool get isExpired => expiresAt.isAfter(new DateTime.now());
 }
 
-class TeslaJsonAccessToken extends TeslaAccessToken {
-  TeslaJsonAccessToken(this.json);
+class FirestoreJsonAccessToken extends FirestoreAccessToken {
+  FirestoreJsonAccessToken(this.json);
 
   final Map<String, dynamic> json;
 
