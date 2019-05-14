@@ -82,42 +82,6 @@ abstract class TeslaHttpClient implements TeslaClient {
   }
 
   @override
-  Future<AllVehicleState> getAllVehicleState(int id) async {
-    return new AllVehicleState(
-        this, await getJsonMap("vehicles/${id}/vehicle_data"));
-  }
-
-  @override
-  Future<ChargeState> getChargeState(int id) async {
-    return new ChargeState(
-        this, await getJsonMap("vehicles/${id}/data_request/charge_state"));
-  }
-
-  @override
-  Future<DriveState> getDriveState(int id) async {
-    return new DriveState(
-        this, await getJsonMap("vehicles/${id}/data_request/drive_state"));
-  }
-
-  @override
-  Future<ClimateState> getClimateState(int id) async {
-    return new ClimateState(
-        this, await getJsonMap("vehicles/${id}/data_request/climate_state"));
-  }
-
-  @override
-  Future<VehicleConfig> getVehicleConfig(int id) async {
-    return new VehicleConfig(
-        this, await getJsonMap("vehicles/${id}/data_request/vehicle_config"));
-  }
-
-  @override
-  Future<GuiSettings> getGuiSettings(int id) async {
-    return new GuiSettings(
-        this, await getJsonMap("vehicles/${id}/data_request/gui_settings"));
-  }
-
-  @override
   Future sendVehicleCommand(int vehicleId, String command,
       {Map<String, dynamic> params}) async {
     var result = await getJsonMap("vehicles/${vehicleId}/command/${command}",
