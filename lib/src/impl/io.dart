@@ -51,7 +51,7 @@ class FirestoreClientImpl extends FirestoreHttpClient {
     var content = await response.transform(const Utf8Decoder()).join();
     if (response.statusCode != 200) {
       throw new Exception(
-          "Failed to perform action. (Status Code: ${response.statusCode})\n${content}");
+          "Failed to perform action. $uri (Status Code: ${response.statusCode})\n${content}");
     }
     var result = const JsonDecoder().convert(content);
 

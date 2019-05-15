@@ -26,14 +26,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  FirestoreClient _client;
   void _login() async {
-    final _client = FirestoreClient(
+    final client = FirestoreClient(
       'rody.davis.jr@gmail.com',
       'Rody2019!',
       'AIzaSyAhTLKUpaeOKcb0JD2e9OVKcdPOPRBbCPM',
     );
-    await _client.login();
-    print('token: ${_client.token.accessToken}');
+    await client.login();
+    try {
+      if (mounted && client != null) {
+        print('token: ${client?.token?.accessToken}');
+        setState(() {
+          _client = client;
+        });
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  void _getUsers() async {
+    final _data = await _client.document('users/LLftEJzjYFPbKZuqJDdh').get();
+    print('Data: ${_data.json}');
   }
 
   @override
@@ -51,6 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
               label: Text('Login'),
               onPressed: _login,
             ),
+            if (_client != null) ...[
+              RaisedButton.icon(
+                icon: Icon(Icons.people),
+                label: Text('Get users'),
+                onPressed: _getUsers,
+              ),
+            ],
           ],
         ),
       ),

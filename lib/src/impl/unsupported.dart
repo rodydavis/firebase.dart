@@ -31,22 +31,12 @@ class FirestoreClientImpl implements FirestoreClient {
       throw "This platform is not supported.";
 
   @override
-  Future<Document> getDocument(int id) {
+  Future<DocumentSnapshot> getDocumentSnapshot(String path) {
     throw "This platform is not supported.";
   }
 
   @override
-  Future<List<Document>> listDocuments(String path) {
-    throw "This platform is not supported.";
-  }
-
-  @override
-  Future<Collection> getCollection(int id) {
-    throw "This platform is not supported.";
-  }
-
-  @override
-  Future<List<Collection>> listCollection(String path) {
+  Future<List<DocumentSnapshot>> listDocumentSnapshots(String path) {
     throw "This platform is not supported.";
   }
 
@@ -62,4 +52,14 @@ class FirestoreClientImpl implements FirestoreClient {
 
   @override
   String get apiKey => throw "This platform is not supported.";
+
+  @override
+  CollectionReference collection(String path) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  DocumentReference document(String path) {
+    throw "This platform is not supported.";
+  }
 }

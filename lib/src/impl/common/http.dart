@@ -29,7 +29,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
     }
 
     if (refreshable) {
-      var now = new DateTime.now();
+      var now = DateTime.now();
       return token.expiresAt.difference(now).abs().inSeconds >= 60;
     }
     return true;
@@ -49,7 +49,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
           },
           needsToken: false);
 
-      token = new FirestoreJsonAccessToken(result);
+      token = FirestoreJsonAccessToken(result, DateTime.now());
       return;
     }
 
@@ -60,43 +60,38 @@ abstract class FirestoreHttpClient implements FirestoreClient {
         },
         needsToken: false);
 
-    token = new FirestoreJsonAccessToken(result);
+    token = FirestoreJsonAccessToken(result, DateTime.now());
   }
 
   @override
-  Future<List<Document>> listDocuments(String path) async {
-    var vehicles = <Document>[];
+  Future<List<DocumentSnapshot>> listDocumentSnapshots(String path) async {
+    var list = <DocumentSnapshot>[];
 
-    var result = await getJsonList("vehicles");
+    var result = await getJsonList("$path", extract: 'documents');
 
     for (var item in result) {
-      vehicles.add(new Document(this, item));
+      list.add(new DocumentSnapshot(this, path, item));
     }
 
-    return vehicles;
+    return list;
   }
 
   @override
-  Future<Document> getDocument(int id) async {
-    return new Document(this, await getJsonMap("vehicles/${id}"));
+  CollectionReference collection(String path) {
+    assert(path != null);
+    return CollectionReference(this, path.split('/'));
   }
 
   @override
-  Future<List<Collection>> listCollection(String path) async {
-    var vehicles = <Collection>[];
-
-    var result = await getJsonList("vehicles");
-
-    for (var item in result) {
-      vehicles.add(new Collection(this, item));
-    }
-
-    return vehicles;
+  DocumentReference document(String path) {
+    assert(path != null);
+    return DocumentReference(this, path.split('/'));
   }
 
   @override
-  Future<Collection> getCollection(int id) async {
-    return new Collection(this, await getJsonMap("vehicles/${id}"));
+  Future<DocumentSnapshot> getDocumentSnapshot(String path) async {
+    final _data = await getJsonMap("$path", extract: null);
+    return DocumentSnapshot(this, path, _asStringKeyedMap(_data));
   }
 
   Future<Map<String, dynamic>> getJsonMap(String url,
@@ -119,8 +114,19 @@ abstract class FirestoreHttpClient implements FirestoreClient {
       {bool needsToken: true, String extract, Map<String, dynamic> body});
 
   Uri _apiUrl(String path, bool standard) {
-    path = standard ? "/api/1/${path}" : path;
+    path = standard
+        ? "v1/projects/church-family/databases/(default)/documents/$path"
+        : path;
     var uri = endpoints.firestoreUrl.resolve(path);
     return uri;
+  }
+}
+
+Map<String, dynamic> _asStringKeyedMap(Map<dynamic, dynamic> map) {
+  if (map == null) return null;
+  if (map is Map<String, dynamic>) {
+    return map;
+  } else {
+    return Map<String, dynamic>.from(map);
   }
 }

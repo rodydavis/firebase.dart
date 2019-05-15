@@ -10,7 +10,7 @@ abstract class FirestoreAccessToken {
 }
 
 class FirestoreJsonAccessToken extends FirestoreAccessToken {
-  FirestoreJsonAccessToken(this.json);
+  FirestoreJsonAccessToken(this.json, this.createdAt);
 
   final Map<String, dynamic> json;
   String get displayName => json['displayName'] as String;
@@ -18,8 +18,7 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   String get kind => json['kind'] as String;
   String get localId => json['localId'] as String;
   bool get registered => json['registered'] as bool;
-  int get expiresInSeconds => json["expires_in"] as int;
-  int get createdAtEpochSeconds => json["created_at"] as int;
+  int get expiresInSeconds => int.tryParse(json["expiresIn"]);
 
   @override
   String get accessToken => json["idToken"] as String;
@@ -28,8 +27,7 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   String get refreshToken => json["refresh_token"] as String;
 
   @override
-  DateTime get createdAt =>
-      new DateTime.fromMillisecondsSinceEpoch(createdAtEpochSeconds * 1000);
+  final DateTime createdAt;
 
   @override
   DateTime get expiresAt =>
