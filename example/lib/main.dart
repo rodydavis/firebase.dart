@@ -29,9 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
   FirestoreClient _client;
   void _login() async {
     final client = FirestoreClient(
-      'rody.davis.jr@gmail.com',
-      'Rody2019!',
-      'AIzaSyAhTLKUpaeOKcb0JD2e9OVKcdPOPRBbCPM',
+      'USERNAME_FOR_USER',
+      'PASSWORD_FOR_USER',
+      'FIREBASE_API_KEY',
     );
     await client.login();
     try {
