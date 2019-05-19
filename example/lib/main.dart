@@ -25,7 +25,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-const kApiKey = 'AIzaSyAhTLKUpaeOKcb0JD2e9OVKcdPOPRBbCPM'; //'FIREBASE_API_KEY';
+const kApiKey = 'FIREBASE_API_KEY';
 
 class _MyHomePageState extends State<MyHomePage> {
   FirestoreClient _client;
@@ -59,8 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _getUsers() async {
-    final _path =
-        _client.collection('users'); //.document('LLftEJzjYFPbKZuqJDdh');
+    final _path = _client.collection('users');
     print('Data: ${_path.path} ${_path.pathComponents} ${_path.documentID}');
     final _data = await _path.snapshots();
     for (var snapshot in _data) {
