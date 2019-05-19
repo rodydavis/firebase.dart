@@ -6,8 +6,8 @@ abstract class FirestoreApiEndpoints {
   }
 
   Uri get firestoreUrl;
-  Uri getAuthUrl(String apiKey);
-  Uri getRefreshUrl(String apiKey);
+  Uri getAuthUrl(App app);
+  Uri getRefreshUrl(App app);
   bool get enableProxyMode;
 }
 
@@ -20,10 +20,10 @@ class FirestoreStandardApiEndpoints implements FirestoreApiEndpoints {
   bool get enableProxyMode => false;
 
   @override
-  Uri getAuthUrl(String apiKey) => Uri.parse(
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$apiKey');
+  Uri getAuthUrl(App app) => Uri.parse(
+      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${app.apiKey}');
 
   @override
-  Uri getRefreshUrl(String apiKey) =>
-      Uri.parse('https://securetoken.googleapis.com/v1/token?key=$apiKey');
+  Uri getRefreshUrl(App app) => Uri.parse(
+      'https://securetoken.googleapis.com/v1/token?key=${app.apiKey}');
 }

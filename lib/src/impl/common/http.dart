@@ -43,7 +43,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   @override
   Future login() async {
     if (!isCurrentTokenValid(false)) {
-      var result = await sendHttpRequest(endpoints.getAuthUrl(app.apiKey),
+      var result = await sendHttpRequest(endpoints.getAuthUrl(app),
           body: {
             "email": email,
             "password": password,
@@ -55,7 +55,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
       return;
     }
 
-    var result = await sendHttpRequest(endpoints.getRefreshUrl(app.apiKey),
+    var result = await sendHttpRequest(endpoints.getRefreshUrl(app),
         body: {
           "grant_type": "refresh_token",
           "refresh_token": token.refreshToken
