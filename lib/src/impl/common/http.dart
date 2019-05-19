@@ -4,9 +4,11 @@ import 'dart:async';
 
 import '../../../api.dart';
 
+const String _defaultAppName = "[DEFAULT]";
+
 abstract class FirestoreHttpClient implements FirestoreClient {
   FirestoreHttpClient(
-      this.email, this.password, this.apiKey, this.token, this.endpoints);
+      this.email, this.password, this.app, this.token, this.endpoints);
 
   @override
   final String email;
@@ -15,7 +17,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   final String password;
 
   @override
-  final String apiKey;
+  final App app;
 
   @override
   final FirestoreApiEndpoints endpoints;
@@ -41,7 +43,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   @override
   Future login() async {
     if (!isCurrentTokenValid(false)) {
-      var result = await sendHttpRequest(endpoints.getAuthUrl(apiKey),
+      var result = await sendHttpRequest(endpoints.getAuthUrl(app.apiKey),
           body: {
             "email": email,
             "password": password,
@@ -53,7 +55,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
       return;
     }
 
-    var result = await sendHttpRequest(endpoints.getRefreshUrl(apiKey),
+    var result = await sendHttpRequest(endpoints.getRefreshUrl(app.apiKey),
         body: {
           "grant_type": "refresh_token",
           "refresh_token": token.refreshToken

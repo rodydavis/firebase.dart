@@ -5,10 +5,13 @@ import 'dart:async';
 import '../../api.dart';
 
 class FirestoreClientImpl implements FirestoreClient {
-  FirestoreClientImpl(String email, String password, String apiKey,
+  FirestoreClientImpl(String email, String password, App app,
       FirestoreAccessToken token, FirestoreApiEndpoints endpoints) {
     throw "This platform is not supported.";
   }
+
+  @override
+  App get app => throw "This platform is not supported.";
 
   @override
   String get email => throw "This platform is not supported.";

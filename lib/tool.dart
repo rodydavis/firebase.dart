@@ -38,7 +38,7 @@ String _getEnvKey(List<String> possible) {
 FirestoreClient getFirestoreClient(
     {String teslaUsername,
     String teslaPassword,
-    String apiKey,
+    App app,
     FirestoreApiEndpoints endpoints}) {
   var email = teslaUsername ?? _getEnvKey(_emailEnvVars).trim();
   var password = teslaPassword ?? _getEnvKey(_passwordEnvVars);
@@ -52,5 +52,5 @@ FirestoreClient getFirestoreClient(
     password = password.substring(0, password.length - 1);
   }
 
-  return new FirestoreClient(email, password, apiKey, endpoints: endpoints);
+  return new FirestoreClient(email, password, app, endpoints: endpoints);
 }

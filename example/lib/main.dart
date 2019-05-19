@@ -25,7 +25,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-const kApiKey = 'FIREBASE_API_KEY';
+const kApiKey = App(
+  apiKey: 'FIREBASE_API_KEY',
+);
 
 class _MyHomePageState extends State<MyHomePage> {
   FirestoreClient _client;

@@ -17,11 +17,11 @@ HttpClient _createHttpClient() {
 }
 
 class FirestoreClientImpl extends FirestoreHttpClient {
-  FirestoreClientImpl(String email, String password, String apiKey,
+  FirestoreClientImpl(String email, String password, App app,
       FirestoreAccessToken token, FirestoreApiEndpoints endpoints,
       {HttpClient client})
       : this.client = client == null ? _createHttpClient() : client,
-        super(email, password, apiKey, token, endpoints);
+        super(email, password, app, token, endpoints);
 
   final HttpClient client;
 
