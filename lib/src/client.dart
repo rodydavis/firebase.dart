@@ -20,8 +20,8 @@ abstract class FirestoreClient {
 
   Future login();
 
-  Future<List<DocumentSnapshot>> listDocumentSnapshots(String id);
-  Future<DocumentSnapshot> getDocumentSnapshot(String id);
+  Future<List<DocumentSnapshot>> listDocumentSnapshots(String path);
+  Future<DocumentSnapshot> getDocumentSnapshot(String path);
 
   /// Gets a [CollectionReference] for the specified Firestore path.
   CollectionReference collection(String path);

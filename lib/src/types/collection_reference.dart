@@ -12,6 +12,10 @@ class CollectionReference implements FirestoreReference {
   @override
   final List<String> pathComponents;
 
+  @override
+  bool operator ==(dynamic o) =>
+      o is DocumentReference && o.client == client && o.path == path;
+
   /// ID of the referenced collection.
   String get id => _pathComponents.isEmpty ? null : _pathComponents.last;
 
@@ -27,10 +31,6 @@ class CollectionReference implements FirestoreReference {
       (List<String>.from(_pathComponents)..removeLast()),
     );
   }
-
-  @override
-  bool operator ==(dynamic o) =>
-      o is DocumentReference && o.client == client && o.path == path;
 
   /// Slash-delimited path representing the database location of this query.
   String get path => _pathComponents.join('/');
@@ -53,5 +53,9 @@ class CollectionReference implements FirestoreReference {
       childPath = List<String>.from(_pathComponents)..addAll(path.split(('/')));
     }
     return DocumentReference(client, childPath);
+  }
+
+  Future<List<DocumentSnapshot>> snapshots() async {
+    return client.listDocumentSnapshots('$path');
   }
 }

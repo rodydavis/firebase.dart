@@ -70,7 +70,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
     var result = await getJsonList("$path", extract: 'documents');
 
     for (var item in result) {
-      list.add(new DocumentSnapshot(this, path, item));
+      list.add(new DocumentSnapshot(this, item));
     }
 
     return list;
@@ -91,7 +91,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   @override
   Future<DocumentSnapshot> getDocumentSnapshot(String path) async {
     final _data = await getJsonMap("$path", extract: null);
-    return DocumentSnapshot(this, path, _asStringKeyedMap(_data));
+    return DocumentSnapshot(this, _asStringKeyedMap(_data));
   }
 
   Future<Map<String, dynamic>> getJsonMap(String url,
@@ -114,9 +114,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
       {bool needsToken: true, String extract, Map<String, dynamic> body});
 
   Uri _apiUrl(String path, bool standard) {
-    path = standard
-        ? "v1/projects/church-family/databases/(default)/documents/$path"
-        : path;
+    path = standard ? "$path" : path;
     var uri = endpoints.firestoreUrl.resolve(path);
     return uri;
   }

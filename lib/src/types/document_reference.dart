@@ -34,6 +34,6 @@ class DocumentReference implements FirestoreReference {
   ///
   /// If no document exists, the read will return null.
   Future<DocumentSnapshot> get() async {
-    return client.getDocumentSnapshot('$path/$documentID');
+    return client.getDocumentSnapshot('$path');
   }
 }
