@@ -25,8 +25,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-const kApiKey = App(
+const _app = App(
   apiKey: 'FIREBASE_API_KEY',
+  projectId: 'project-id',
 );
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -39,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       _setLoding(true);
-      final client = FirestoreClient(_username, _password, kApiKey);
+      final client = FirestoreClient(_username, _password, _app);
       try {
         await client.login();
         if (mounted && client != null) {
@@ -84,20 +85,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    TextFormField(
-                      decoration:
-                          InputDecoration(filled: true, hintText: 'Username'),
-                      onSaved: (val) => _username = val,
-                      validator: (val) =>
-                          val.isEmpty ? 'Username Required' : null,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        decoration:
+                            InputDecoration(filled: true, hintText: 'Username'),
+                        onSaved: (val) => _username = val,
+                        validator: (val) =>
+                            val.isEmpty ? 'Username Required' : null,
+                      ),
                     ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(filled: true, hintText: 'Password'),
-                      onSaved: (val) => _password = val,
-                      validator: (val) =>
-                          val.isEmpty ? 'Password Required' : null,
-                      obscureText: true,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        decoration:
+                            InputDecoration(filled: true, hintText: 'Password'),
+                        onSaved: (val) => _password = val,
+                        validator: (val) =>
+                            val.isEmpty ? 'Password Required' : null,
+                        obscureText: true,
+                      ),
                     ),
                     RaisedButton.icon(
                       icon: Icon(Icons.account_circle),
@@ -117,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 RaisedButton.icon(
                   icon: Icon(Icons.people),
-                  label: Text('Get users'),
+                  label: Text('Get Users'),
                   onPressed: _getUsers,
                 ),
               ],

@@ -33,6 +33,8 @@ abstract class FirestoreClient {
   Future close();
 }
 
+const String _defaultAppName = "default";
+
 class App {
   /// Creates (and initializes) a Firebase App with API key, auth domain,
   /// database URL and storage bucket.
@@ -45,13 +47,32 @@ class App {
     this.projectId,
     this.storageBucket,
     this.messagingSenderId,
-    this.name,
-  });
+    this.appId,
+    String database,
+  })  : _name = database,
+        assert(apiKey != null),
+        assert(projectId != null);
+
+  factory App.fromJson(Map<String, dynamic> json) {
+    return App(
+      apiKey: json['apiKey'],
+      authDomain: json['authDomain'],
+      databaseURL: json['databaseURL'],
+      projectId: json['projectId'],
+      storageBucket: json['storageBucket'],
+      messagingSenderId: json['messagingSenderId'],
+      appId: json['appId'],
+    );
+  }
   final String apiKey;
   final String authDomain;
   final String databaseURL;
   final String projectId;
   final String storageBucket;
   final String messagingSenderId;
-  final String name;
+  final String appId;
+
+  /// Database Override [DEFAULT]
+  String get name => _name ?? _defaultAppName;
+  final String _name;
 }

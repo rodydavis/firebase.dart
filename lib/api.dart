@@ -1,6 +1,7 @@
 library firestore_api;
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firestore_api/utils/push_id_generator.dart';
 

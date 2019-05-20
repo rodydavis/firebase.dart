@@ -117,7 +117,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
   Uri _apiUrl(String path, bool standard) {
     path = standard ? "$path" : path;
-    var uri = endpoints.firestoreUrl.resolve(path);
+    var uri = endpoints.getFirestoreUrl(app).resolve(path);
     return uri;
   }
 }

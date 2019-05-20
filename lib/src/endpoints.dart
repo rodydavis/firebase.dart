@@ -5,7 +5,7 @@ abstract class FirestoreApiEndpoints {
     return new FirestoreStandardApiEndpoints();
   }
 
-  Uri get firestoreUrl;
+  Uri getFirestoreUrl(App app);
   Uri getAuthUrl(App app);
   Uri getRefreshUrl(App app);
   bool get enableProxyMode;
@@ -13,8 +13,8 @@ abstract class FirestoreApiEndpoints {
 
 class FirestoreStandardApiEndpoints implements FirestoreApiEndpoints {
   @override
-  final Uri firestoreUrl = Uri.parse(
-      "https://firestore.googleapis.com/v1/projects/church-family/databases/(default)/documents/");
+  Uri getFirestoreUrl(App app) => Uri.parse(
+      "https://firestore.googleapis.com/v1/projects/${app.projectId}/databases/(${app.name})/documents/");
 
   @override
   bool get enableProxyMode => false;
