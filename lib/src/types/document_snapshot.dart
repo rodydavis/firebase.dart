@@ -62,9 +62,11 @@ dynamic _getValue(value) {
         "longitude": num.tryParse(_map['longitude'].toString()),
       };
     } else if (key == 'arrayValue') {
+      // final Iterable i = json.encode(map[key]);
       // final List<Map<String, dynamic>> _list = _map;
       // return _getList(_map);
       // return List.from(_map)?.map((m) => _getValue(m))?.toList() ?? [];
+      // return i.toList();
     } else if (key == 'mapValue') {
       return _getData(_map['fields']);
     }
