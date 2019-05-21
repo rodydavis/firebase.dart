@@ -61,15 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
   }
 
-  void _getUsers() async {
-    final _path = _client.collection('users');
-    print('Data: ${_path.path} ${_path.pathComponents} ${_path.documentID}');
-    final _data = await _path.snapshots();
-    for (var snapshot in _data) {
-      print(snapshot.data);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,10 +116,78 @@ class _MyHomePageState extends State<MyHomePage> {
                 RaisedButton.icon(
                   icon: Icon(Icons.people),
                   label: Text('Get Users'),
-                  onPressed: _getUsers,
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => UsesExample(client: _client),
+                      )),
                 ),
               ],
             ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class UsesExample extends StatefulWidget {
+  UsesExample({
+    @required this.client,
+  });
+  final FirestoreClient client;
+  @override
+  _UsesExampleState createState() => _UsesExampleState();
+}
+
+class _UsesExampleState extends State<UsesExample> {
+  @override
+  void initState() {
+    _getUsers();
+    super.initState();
+  }
+
+  List<DocumentSnapshot> _users;
+
+  void _getUsers() async {
+    final _path = widget.client.collection('users');
+    print('Data: ${_path.path} ${_path.pathComponents} ${_path.documentID}');
+    final _data = await _path.snapshots();
+
+    if (mounted)
+      setState(() {
+        _users = _data;
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Users List'),
+      ),
+      body: Builder(
+        builder: (_) {
+          if (_users == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (_users.isEmpty) {
+            return Center(
+              child: Text('No Users Found'),
+            );
+          }
+          return ListView.builder(
+            itemCount: _users.length,
+            itemBuilder: (_, index) {
+              final _item = _users[index];
+              return ListTile(
+                title: Text(
+                    '${_item?.data['first_name'] ?? ''} ${_item?.data['last_name'] ?? ''}'),
+                subtitle: Text(_item.data['email']),
+              );
+            },
           );
         },
       ),

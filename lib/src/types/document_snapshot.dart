@@ -62,15 +62,20 @@ dynamic _getValue(value) {
         "longitude": num.tryParse(_map['longitude'].toString()),
       };
     } else if (key == 'arrayValue') {
-      // final Iterable i = json.encode(map[key]);
-      // final List<Map<String, dynamic>> _list = _map;
-      // return _getList(_map);
-      // return List.from(_map)?.map((m) => _getValue(m))?.toList() ?? [];
-      // return i.toList();
+      return _getList(_map);
     } else if (key == 'mapValue') {
       return _getData(_map['fields']);
     }
   }
 
   return map;
+}
+
+List<dynamic> _getList(Map<String, dynamic> data) {
+  final _list = List.from(data['values']);
+  List<dynamic> _items = [];
+  for (var item in _list) {
+    _items.add(_getValue(item));
+  }
+  return _items;
 }
