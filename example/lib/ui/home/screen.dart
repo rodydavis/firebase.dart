@@ -20,42 +20,50 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home Screen'),
       ),
       body: SafeArea(
-        child: Center(
-            child: FutureBuilder<FirebaseUser>(
-          future: client.getCurrentUser(client.token.idToken),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final _user = snapshot.data;
-              JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-              String prettyprint = encoder.convert(_user.json);
-              debugPrint(prettyprint);
-              return Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      prettyprint,
-                    )),
-                  ),
-                  FlatButton(
-                    child: Text('Edit Info'),
-                    onPressed: () async {
-                      final _valid = await Navigator.push<bool>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => EditInfoScreen(user: _user),
-                            fullscreenDialog: true,
-                          ));
-                      if (_valid != null && _valid) {
-                        // Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ],
+        child: Center(child: Builder(
+          builder: (_) {
+            if (client.token.idToken == null) {
+              return Center(
+                child: Text('Error'),
               );
             }
-            return Center(
-              child: CircularProgressIndicator(),
+            return FutureBuilder<FirebaseUser>(
+              future: client.getCurrentUser(client.token.idToken),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final _user = snapshot.data;
+                  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+                  String prettyprint = encoder.convert(_user.json);
+                  debugPrint(prettyprint);
+                  return Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Center(
+                            child: Text(
+                          prettyprint,
+                        )),
+                      ),
+                      FlatButton(
+                        child: Text('Edit Info'),
+                        onPressed: () async {
+                          final _valid = await Navigator.push<bool>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => EditInfoScreen(user: _user),
+                                fullscreenDialog: true,
+                              ));
+                          if (_valid != null && _valid) {
+                            // Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
             );
           },
         )),
