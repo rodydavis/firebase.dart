@@ -35,27 +35,13 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
   @override
   Future login(String email, String password) async {
-    if (!isCurrentTokenValid(false)) {
-      var result = await sendHttpRequest(
-          Uri.parse(
-              'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${app.apiKey}'),
-          body: {
-            "email": email,
-            "password": password,
-            "returnSecureToken": true,
-          },
-          needsToken: false);
-
-      token = FirestoreJsonAccessToken(result, DateTime.now());
-      return;
-    }
-
     var result = await sendHttpRequest(
         Uri.parse(
-            'https://securetoken.googleapis.com/v1/token?key=${app.apiKey}'),
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${app.apiKey}'),
         body: {
-          "grant_type": "refresh_token",
-          "refresh_token": token.refreshToken
+          "email": email,
+          "password": password,
+          "returnSecureToken": true,
         },
         needsToken: false);
 
@@ -76,8 +62,18 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future signUp(String email, String password) {
-    throw "This platform is not supported.";
+  Future signUp(String email, String password) async {
+    var result = await sendHttpRequest(
+        Uri.parse(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}'),
+        body: {
+          "email": email,
+          "password": password,
+          "returnSecureToken": true,
+        },
+        needsToken: false);
+
+    token = FirestoreJsonAccessToken(result, DateTime.now());
   }
 
   @override
