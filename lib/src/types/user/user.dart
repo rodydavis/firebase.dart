@@ -1,13 +1,15 @@
 part of firebase_rest_api;
 
 class FirebaseUser implements FirebaseObject {
-  FirebaseUser(this.client, this.json);
+  FirebaseUser(this.client, this.json, this.idToken);
 
   @override
   final FirestoreClient client;
 
   @override
   final Map<String, dynamic> json;
+
+  final String idToken;
 
   String get displayName => json['displayName'];
 
@@ -47,30 +49,30 @@ class FirebaseUser implements FirebaseObject {
 
   Future editInfo({String displayName, String photoUrl}) {
     return client.updateProfileForUser(
-      client.token.idToken,
+      idToken,
       displayName: displayName,
       photoUrl: photoUrl,
     );
   }
 
   Future unlinkProviders(List<String> providers) {
-    return client.unlinkProvidersForUser(client.token.idToken, providers);
+    return client.unlinkProvidersForUser(idToken, providers);
   }
 
   Future<String> sendEmailVerification() {
-    return client.sendEmailVerificationForUser(client.token.idToken);
+    return client.sendEmailVerificationForUser(idToken);
   }
 
   Future changePassword(String password) {
-    return client.changePasswordForUser(client.token.idToken, password);
+    return client.changePasswordForUser(idToken, password);
   }
 
   Future changeEmail(String email) {
-    return client.changeEmailForUser(client.token.idToken, email);
+    return client.changeEmailForUser(idToken, email);
   }
 
   Future<FirebaseUser> getInfo() {
-    return client.getCurrentUser(client.token.idToken);
+    return client.getCurrentUser(idToken);
   }
 }
 

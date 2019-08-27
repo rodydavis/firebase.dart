@@ -140,7 +140,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
     if (result != null)
       for (var item in result) {
-        final _user = FirebaseUser(this, item);
+        final _user = FirebaseUser(this, item, idToken);
         if (_user.uid == token.localId) {
           return _user;
         }
@@ -168,7 +168,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
     if (result != null)
       for (var item in result) {
-        final _user = FirebaseUser(this, item);
+        final _user = FirebaseUser(this, item, idToken);
         if (_user.uid == uid) {
           return _user;
         }
@@ -192,7 +192,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
     if (result != null)
       for (var item in result) {
-        list.add(FirebaseUser(this, item));
+        list.add(FirebaseUser(this, item, idToken));
       }
     return list;
   }
