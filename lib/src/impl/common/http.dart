@@ -1,4 +1,4 @@
-library firestore_api.impl.common.http;
+library firebase_rest_api.impl.common.http;
 
 import 'dart:async';
 
@@ -7,14 +7,7 @@ import '../../../api.dart';
 const String _defaultAppName = "[DEFAULT]";
 
 abstract class FirestoreHttpClient implements FirestoreClient {
-  FirestoreHttpClient(
-      this.email, this.password, this.app, this.token, this.endpoints);
-
-  @override
-  final String email;
-
-  @override
-  final String password;
+  FirestoreHttpClient(this.app, this.token, this.endpoints);
 
   @override
   final App app;
@@ -41,9 +34,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   bool get isAuthorized => isCurrentTokenValid(true);
 
   @override
-  Future login() async {
+  Future login(String email, String password) async {
     if (!isCurrentTokenValid(false)) {
-      var result = await sendHttpRequest(endpoints.getAuthUrl(app),
+      var result = await sendHttpRequest(
+          Uri.parse(
+              'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${app.apiKey}'),
           body: {
             "email": email,
             "password": password,
@@ -55,7 +50,9 @@ abstract class FirestoreHttpClient implements FirestoreClient {
       return;
     }
 
-    var result = await sendHttpRequest(endpoints.getRefreshUrl(app),
+    var result = await sendHttpRequest(
+        Uri.parse(
+            'https://securetoken.googleapis.com/v1/token?key=${app.apiKey}'),
         body: {
           "grant_type": "refresh_token",
           "refresh_token": token.refreshToken
@@ -63,6 +60,97 @@ abstract class FirestoreHttpClient implements FirestoreClient {
         needsToken: false);
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
+  }
+
+  @override
+  Future loginAnonymously() async {
+    var result = await sendHttpRequest(
+        Uri.parse(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}'),
+        body: {
+          "grant_type": "refresh_token",
+          "refresh_token": token.refreshToken
+        },
+        needsToken: false);
+
+    token = FirestoreJsonAccessToken(result, DateTime.now());
+  }
+
+  @override
+  Future logout() {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future signUp(String email, String password) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future<List<String>> fetchProvidersForEmail(String email) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future changeEmailForUser(String id, String email) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future changePasswordForUser(String id, String password) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future confirmEmailVerification(String code) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future confirmPasswordReset(String code, String password) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future deleteUserAccount(String id) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future getDataForUser(String id) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future linkWithEmailPasswordForUser(
+      String id, String email, String password) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future sendEmailVerificationForUser(String id) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future sendPasswordReset(String email) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future unlinkProvidersForUser(String id, List<String> providers) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future updateProfileForUser(String id,
+      {String displayName, String photoUrl}) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future verifyPasswordResetCode(String code) {
+    throw "This platform is not supported.";
   }
 
   @override

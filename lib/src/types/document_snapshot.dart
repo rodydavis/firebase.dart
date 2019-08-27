@@ -1,6 +1,6 @@
-part of firestore_api;
+part of firebase_rest_api;
 
-class DocumentSnapshot implements FirestoreObject {
+class DocumentSnapshot implements FirebaseObject {
   DocumentSnapshot(this.client, this.json);
 
   /// Reads individual values from the snapshot

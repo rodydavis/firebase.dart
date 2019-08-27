@@ -1,4 +1,4 @@
-name: firestore_api
+name: firebase_rest_api
 description: "Access Firebase Firestore from a REST API"
 version: 0.0.1
 homepage: "https://github.com/SpinlockLabs/tesla.dart"

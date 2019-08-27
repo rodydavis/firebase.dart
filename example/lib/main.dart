@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firestore_api/api.dart';
+import 'package:firebase_rest_api/api.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,8 +26,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 const _app = App(
-  apiKey: 'FIREBASE_API_KEY',
-  projectId: 'project-id',
+  // apiKey: 'FIREBASE_API_KEY',
+  // projectId: 'project-id',
+  apiKey: "AIzaSyCBotmOEP9eOpsvh0HFWRqtMki5qcQdzgk",
+  authDomain: "ampstor.firebaseapp.com",
+  databaseURL: "https://ampstor.firebaseio.com",
+  projectId: "ampstor",
+  storageBucket: "ampstor.appspot.com",
+  messagingSenderId: "561515444898",
+  appId: "1:561515444898:web:9060ee5d860d2ef2",
 );
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -40,9 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       _setLoding(true);
-      final client = FirestoreClient(_username, _password, _app);
+      final client = FirestoreClient(_app);
       try {
-        await client.login();
+        await client.login(_username, _password);
         if (mounted && client != null) {
           print('token: ${client?.token?.accessToken}');
           _client = client;

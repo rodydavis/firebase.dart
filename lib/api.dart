@@ -1,13 +1,12 @@
-library firestore_api;
+library firebase_rest_api;
 
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firestore_api/utils/push_id_generator.dart';
-
 import 'src/impl/unsupported.dart'
     if (dart.library.html) 'src/impl/browser.dart'
     if (dart.library.io) 'src/impl/io.dart';
+import 'utils/push_id_generator.dart';
 
 part 'src/client.dart';
 part 'src/endpoints.dart';

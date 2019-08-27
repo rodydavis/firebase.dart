@@ -1,4 +1,4 @@
-library firestore_api.impl.browser;
+library firebase_rest_api.impl.browser;
 
 import 'dart:async';
 import 'dart:convert';
@@ -8,11 +8,9 @@ import '../../api.dart';
 import 'common/http.dart';
 
 class FirestoreClientImpl extends FirestoreHttpClient {
-  FirestoreClientImpl(String email, String password, App app, FirestoreAccessToken token,
-      FirestoreApiEndpoints endpoints)
-      : super(email, password, app, token, endpoints);
-
-      
+  FirestoreClientImpl(
+      App app, FirestoreAccessToken token, FirestoreApiEndpoints endpoints)
+      : super(app, token, endpoints);
 
   @override
   Future<dynamic> sendHttpRequest(Uri uri,
@@ -22,9 +20,6 @@ class FirestoreClientImpl extends FirestoreHttpClient {
     var request = new HttpRequest();
     request.open(body == null ? "GET" : "POST", uri.toString());
     if (needsToken) {
-      if (!isCurrentTokenValid(true)) {
-        await login();
-      }
       request.setRequestHeader("Authorization", "Bearer ${token.accessToken}");
     }
 

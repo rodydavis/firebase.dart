@@ -1,4 +1,4 @@
-library firestore_api.impl.io;
+library firebase_rest_api.impl.io;
 
 import 'dart:async';
 import 'dart:convert';
@@ -17,11 +17,11 @@ HttpClient _createHttpClient() {
 }
 
 class FirestoreClientImpl extends FirestoreHttpClient {
-  FirestoreClientImpl(String email, String password, App app,
-      FirestoreAccessToken token, FirestoreApiEndpoints endpoints,
+  FirestoreClientImpl(
+      App app, FirestoreAccessToken token, FirestoreApiEndpoints endpoints,
       {HttpClient client})
       : this.client = client == null ? _createHttpClient() : client,
-        super(email, password, app, token, endpoints);
+        super(app, token, endpoints);
 
   final HttpClient client;
 
@@ -38,9 +38,6 @@ class FirestoreClientImpl extends FirestoreHttpClient {
         body == null ? await client.getUrl(uri) : await client.postUrl(uri);
     request.headers.set("User-Agent", "Firestore.dart");
     if (needsToken) {
-      if (!isCurrentTokenValid(true)) {
-        await login();
-      }
       request.headers.add("Authorization", "Bearer ${token.accessToken}");
     }
     if (body != null) {

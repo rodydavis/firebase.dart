@@ -1,6 +1,6 @@
-part of firestore_api;
+part of firebase_rest_api;
 
-abstract class FirestoreObject {
+abstract class FirebaseObject {
   FirestoreClient get client;
   Map<String, dynamic> get json;
 }

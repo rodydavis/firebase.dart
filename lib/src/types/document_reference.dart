@@ -1,4 +1,4 @@
-part of firestore_api;
+part of firebase_rest_api;
 
 class DocumentReference implements FirestoreReference {
   DocumentReference(this.client, this.pathComponents)

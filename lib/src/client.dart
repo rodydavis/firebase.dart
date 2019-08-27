@@ -1,14 +1,11 @@
-part of firestore_api;
+part of firebase_rest_api;
 
 abstract class FirestoreClient {
-  factory FirestoreClient(String email, String password, App app,
+  factory FirestoreClient(App app,
       {FirestoreApiEndpoints endpoints, FirestoreAccessToken token}) {
-    return new FirestoreClientImpl(email, password, app, token,
+    return new FirestoreClientImpl(app, token,
         endpoints == null ? new FirestoreApiEndpoints.standard() : endpoints);
   }
-
-  String get email;
-  String get password;
 
   App get app;
 
@@ -19,7 +16,39 @@ abstract class FirestoreClient {
 
   FirestoreApiEndpoints get endpoints;
 
-  Future login();
+  Future login(String email, String password);
+
+  Future signUp(String email, String password);
+
+  Future<List<String>> fetchProvidersForEmail(String email);
+
+  Future sendPasswordReset(String email);
+
+  Future sendEmailVerificationForUser(String id);
+
+  Future verifyPasswordResetCode(String code);
+
+  Future confirmEmailVerification(String code);
+
+  Future confirmPasswordReset(String code, String password);
+
+  Future changeEmailForUser(String id, String email);
+
+  Future changePasswordForUser(String id, String password);
+
+  Future updateProfileForUser(String id, {String displayName, String photoUrl});
+
+  Future unlinkProvidersForUser(String id, List<String> providers);
+
+  Future getDataForUser(String id);
+
+  Future deleteUserAccount(String id);
+
+  Future linkWithEmailPasswordForUser(String id, String email, String password);
+
+  Future loginAnonymously();
+
+  Future logout();
 
   Future<List<DocumentSnapshot>> listDocumentSnapshots(String path);
   Future<DocumentSnapshot> getDocumentSnapshot(String path);
