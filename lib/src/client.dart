@@ -19,7 +19,8 @@ abstract class FirestoreClient {
 
   Future login(String email, String password);
 
-  Future signUp(String email, String password);
+  Future signUp(String email, String password,
+      {String displayName, String photoUrl});
 
   Future loginAnonymously();
 

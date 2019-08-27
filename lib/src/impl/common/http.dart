@@ -297,7 +297,8 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future signUp(String email, String password) async {
+  Future signUp(String email, String password,
+      {String displayName, String photoUrl}) async {
     var result = await getJsonMap(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}',
         body: {
@@ -308,6 +309,9 @@ abstract class FirestoreHttpClient implements FirestoreClient {
         needsToken: false);
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
+    if (displayName != null || photoUrl != null) {
+      await updateProfileForUser(displayName: displayName, photoUrl: photoUrl);
+    }
     return;
   }
 

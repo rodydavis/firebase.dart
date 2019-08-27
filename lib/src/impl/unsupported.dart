@@ -69,7 +69,8 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future signUp(String email, String password) {
+  Future signUp(String email, String password,
+      {String displayName, String photoUrl}) {
     throw "This platform is not supported.";
   }
 

@@ -15,7 +15,8 @@ class _LoginScreenState extends State<LoginScreen> {
   FirestoreClient _client;
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
-  String _username, _password;
+  bool _signUp = true;
+  String _username, _password, _displayName, _photoUrl;
 
   void _setLoding(bool value) {
     if (mounted)
@@ -29,18 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Login Screen'),
-          actions: <Widget>[
-            if (_client != null)
-              IconButton(
-                icon: Icon(Icons.exit_to_app),
-                onPressed: () {
-                  if (mounted)
-                    setState(() {
-                      _client = null;
-                    });
-                },
-              )
-          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -55,6 +44,28 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Visibility(
+              visible: _signUp,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration:
+                      InputDecoration(filled: true, hintText: 'Display Name'),
+                  onSaved: (val) => _displayName = val,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: _signUp,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration:
+                      InputDecoration(filled: true, hintText: 'Photo URL'),
+                  onSaved: (val) => _photoUrl = val,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
@@ -75,34 +86,44 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(height: 50),
             if (!_loading) ...[
               Flex(
-                direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                direction: Axis.horizontal,
                 children: <Widget>[
-                  RaisedButton(
-                    child: Text('Login'),
+                  FlatButton(
+                    child: Text('Guest Login'),
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        _setLoding(true);
-                        try {
-                          await client.login(_username, _password);
-                        } catch (e) {
-                          print('Error => $e');
-                        }
-                        _checkClient(client);
+                      _setLoding(true);
+                      try {
+                        await client.loginAnonymously();
+                      } catch (e) {
+                        print('Error => $e');
                       }
+                      _checkClient(client);
                     },
                   ),
                   RaisedButton(
-                    child: Text('SignUp'),
+                    child: _signUp ? Text('Sign Up') : Text('Login'),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
                         _setLoding(true);
-                        try {
-                          await client.signUp(_username, _password);
-                        } catch (e) {
-                          print('Error => $e');
+                        if (_signUp) {
+                          try {
+                            await client.signUp(
+                              _username,
+                              _password,
+                              displayName: _displayName,
+                              photoUrl: _photoUrl,
+                            );
+                          } catch (e) {
+                            print('Error => $e');
+                          }
+                        } else {
+                          try {
+                            await client.login(_username, _password);
+                          } catch (e) {
+                            print('Error => $e');
+                          }
                         }
                         _checkClient(client);
                       }
@@ -112,17 +133,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Container(height: 20),
               FlatButton(
-                child: Text('Guest Login'),
-                onPressed: () async {
-                  _setLoding(true);
-                  try {
-                    await client.loginAnonymously();
-                  } catch (e) {
-                    print('Error => $e');
-                  }
-                  _checkClient(client);
+                child: Text(_signUp
+                    ? 'Already have an account?'
+                    : 'Create a new account?'),
+                onPressed: () {
+                  if (mounted)
+                    setState(() {
+                      _signUp = !_signUp;
+                    });
                 },
               ),
+              Container(height: 20),
             ],
             if (_loading) ...[CircularProgressIndicator()],
           ],
