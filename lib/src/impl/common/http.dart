@@ -68,17 +68,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
         Uri.parse(
             'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}'),
         body: {
-          "grant_type": "refresh_token",
-          "refresh_token": token.refreshToken
+          "returnSecureToken": true,
         },
         needsToken: false);
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
-  }
-
-  @override
-  Future logout() {
-    throw "This platform is not supported.";
   }
 
   @override
@@ -159,9 +153,10 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
     var result = await getJsonList("$path", extract: 'documents');
 
-    for (var item in result) {
-      list.add(new DocumentSnapshot(this, item));
-    }
+    if (result != null)
+      for (var item in result) {
+        list.add(new DocumentSnapshot(this, item));
+      }
 
     return list;
   }

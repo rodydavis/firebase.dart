@@ -28,13 +28,13 @@ class MyHomePage extends StatefulWidget {
 const _app = App(
   // apiKey: 'FIREBASE_API_KEY',
   // projectId: 'project-id',
-  apiKey: "AIzaSyCBotmOEP9eOpsvh0HFWRqtMki5qcQdzgk",
-  authDomain: "ampstor.firebaseapp.com",
-  databaseURL: "https://ampstor.firebaseio.com",
-  projectId: "ampstor",
-  storageBucket: "ampstor.appspot.com",
-  messagingSenderId: "561515444898",
-  appId: "1:561515444898:web:9060ee5d860d2ef2",
+  apiKey: "AIzaSyCCAEs_QDl-bKQ5ZZx0MjdPk6XqsSsEsx0",
+  authDomain: "sandbox-79509.firebaseapp.com",
+  databaseURL: "https://sandbox-79509.firebaseio.com",
+  projectId: "sandbox-79509",
+  storageBucket: "",
+  messagingSenderId: "143797816149",
+  appId: "1:143797816149:web:5d85373aa91d436f",
 );
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -42,24 +42,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
   String _username, _password;
-
-  void _login() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      _setLoding(true);
-      final client = FirestoreClient(_app);
-      try {
-        await client.login(_username, _password);
-        if (mounted && client != null) {
-          print('token: ${client?.token?.accessToken}');
-          _client = client;
-        }
-      } on Exception catch (e) {
-        print(e);
-      }
-    }
-    _setLoding(false);
-  }
 
   void _setLoding(bool value) {
     if (mounted)
@@ -73,9 +55,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          if (_client != null)
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                if (mounted)
+                  setState(() {
+                    _client = null;
+                  });
+              },
+            )
+        ],
       ),
       body: Builder(
         builder: (_) {
+          final client = FirestoreClient(_app);
           if (_client == null || !_client.isAuthorized) {
             return Center(
               child: Form(
@@ -104,11 +99,36 @@ class _MyHomePageState extends State<MyHomePage> {
                         obscureText: true,
                       ),
                     ),
-                    RaisedButton.icon(
-                      icon: Icon(Icons.account_circle),
-                      label: Text('Login'),
-                      onPressed: _loading ? null : _login,
-                    ),
+                    if (!_loading) ...[
+                      RaisedButton.icon(
+                        icon: Icon(Icons.account_circle),
+                        label: Text('Login'),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            _setLoding(true);
+                            try {
+                              await client.login(_username, _password);
+                            } catch (e) {
+                              print('Error => $e');
+                            }
+                            _checkClient(client);
+                          }
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Guest Login'),
+                        onPressed: () async {
+                          _setLoding(true);
+                          try {
+                            await client.loginAnonymously();
+                          } catch (e) {
+                            print('Error => $e');
+                          }
+                          _checkClient(client);
+                        },
+                      ),
+                    ],
                     if (_loading) ...[CircularProgressIndicator()],
                   ],
                 ),
@@ -135,6 +155,18 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
+  }
+
+  void _checkClient(FirestoreClient client) {
+    try {
+      if (mounted && client != null) {
+        print('token: ${client?.token?.accessToken}');
+        _client = client;
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    _setLoding(false);
   }
 }
 

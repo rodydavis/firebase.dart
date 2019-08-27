@@ -10,6 +10,10 @@ class FirebaseUser implements FirebaseObject {
   final Map<String, dynamic> json;
 
   String get displayName => json[''];
+
   String get email => json[''];
+
   String get uid => json[''];
+
+  bool get isAnonymous => email == null || email.isEmpty;
 }

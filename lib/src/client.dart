@@ -48,8 +48,6 @@ abstract class FirestoreClient {
 
   Future loginAnonymously();
 
-  Future logout();
-
   Future<List<DocumentSnapshot>> listDocumentSnapshots(String path);
   Future<DocumentSnapshot> getDocumentSnapshot(String path);
 

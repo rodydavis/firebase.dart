@@ -9,8 +9,6 @@ abstract class FirestoreAccessToken {
 
   DateTime get expiresAt;
 
-  bool get isAnonymous;
-
   bool get isExpired => expiresAt.isAfter(new DateTime.now());
 }
 
@@ -45,7 +43,4 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   String get idToken => json['id_token'] as String;
 
   String get localId => json['localId'] as String;
-
-  @override
-  bool get isAnonymous => (json['email'] as String).isEmpty;
 }
