@@ -10,6 +10,7 @@ abstract class FirestoreClient {
   App get app;
 
   FirestoreAccessToken get token;
+
   set token(FirestoreAccessToken token);
 
   bool get isAuthorized;
@@ -30,25 +31,28 @@ abstract class FirestoreClient {
 
   Future<String> confirmPasswordReset(String code, String password);
 
-  Future sendEmailVerificationForUser(String id);
+  Future<String> sendEmailVerificationForUser();
 
-  Future confirmEmailVerification(String code);
+  Future<String> confirmEmailVerification(String code);
 
-  Future changeEmailForUser(String id, String email);
+  Future changeEmailForUser(String email);
 
-  Future changePasswordForUser(String id, String password);
+  Future changePasswordForUser(String password);
 
-  Future updateProfileForUser(String id, {String displayName, String photoUrl});
+  Future updateProfileForUser({String displayName, String photoUrl});
 
-  Future unlinkProvidersForUser(String id, List<String> providers);
+  Future<List<FirebaseUser>> getUsersForToken();
 
-  Future getDataForUser(String id);
+  Future<FirebaseUser> getUserInfo(String uid);
+
+  Future unlinkProvidersForUser(List<String> providers);
 
   Future deleteUserAccount(String id);
 
   Future linkWithEmailPasswordForUser(String id, String email, String password);
 
   Future<List<DocumentSnapshot>> listDocumentSnapshots(String path);
+
   Future<DocumentSnapshot> getDocumentSnapshot(String path);
 
   /// Gets a [CollectionReference] for the specified Firestore path.
@@ -91,15 +95,17 @@ class App {
       appId: json['appId'],
     );
   }
+
   final String apiKey;
+  final String appId;
   final String authDomain;
   final String databaseURL;
+  final String messagingSenderId;
   final String projectId;
   final String storageBucket;
-  final String messagingSenderId;
-  final String appId;
+
+  final String _name;
 
   /// Database Override [DEFAULT]
   String get name => _name ?? _defaultAppName;
-  final String _name;
 }

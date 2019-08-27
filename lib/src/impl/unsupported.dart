@@ -79,17 +79,17 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future changeEmailForUser(String id, String email) {
+  Future changeEmailForUser(String email) {
     throw "This platform is not supported.";
   }
 
   @override
-  Future changePasswordForUser(String id, String password) {
+  Future changePasswordForUser(String password) {
     throw "This platform is not supported.";
   }
 
   @override
-  Future confirmEmailVerification(String code) {
+  Future<String> confirmEmailVerification(String code) {
     throw "This platform is not supported.";
   }
 
@@ -104,18 +104,12 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future getDataForUser(String id) {
+  Future linkWithEmailPasswordForUser(String id, String email, String password) {
     throw "This platform is not supported.";
   }
 
   @override
-  Future linkWithEmailPasswordForUser(
-      String id, String email, String password) {
-    throw "This platform is not supported.";
-  }
-
-  @override
-  Future sendEmailVerificationForUser(String id) {
+  Future<String> sendEmailVerificationForUser() {
     throw "This platform is not supported.";
   }
 
@@ -125,18 +119,27 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future unlinkProvidersForUser(String id, List<String> providers) {
+  Future unlinkProvidersForUser(List<String> providers) {
     throw "This platform is not supported.";
   }
 
   @override
-  Future updateProfileForUser(String id,
-      {String displayName, String photoUrl}) {
+  Future updateProfileForUser({String displayName, String photoUrl}) {
     throw "This platform is not supported.";
   }
 
   @override
   Future<String> verifyPasswordResetCode(String code) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future<List<FirebaseUser>> getUsersForToken() {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future<FirebaseUser> getUserInfo(String uid) {
     throw "This platform is not supported.";
   }
 }

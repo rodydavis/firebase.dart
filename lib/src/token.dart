@@ -9,6 +9,20 @@ abstract class FirestoreAccessToken {
 
   DateTime get expiresAt;
 
+  String get displayName;
+
+  String get email;
+
+  String get kind;
+
+  int get expiresInSeconds;
+
+  String get idToken;
+
+  String get localId;
+
+  bool get emailVerified;
+
   bool get isExpired => expiresAt.isAfter(new DateTime.now());
 }
 
@@ -21,7 +35,7 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   String get accessToken => json["idToken"] as String;
 
   @override
-  String get refreshToken => json["refresh_token"] as String;
+  String get refreshToken => json["refresh_token"];
 
   @override
   final DateTime createdAt;
@@ -30,15 +44,24 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   DateTime get expiresAt =>
       createdAt.add(new Duration(seconds: expiresInSeconds));
 
+  @override
   String get displayName => json['displayName'] as String;
 
+  @override
   String get email => json['email'] as String;
 
+  @override
   String get kind => json['kind'] as String;
 
-  int get expiresInSeconds => int.tryParse(json["expiresIn"]);
-
+  @override
   String get idToken => json['id_token'] as String;
 
+  @override
   String get localId => json['localId'] as String;
+
+  @override
+  int get expiresInSeconds => int.tryParse(json["expiresIn"]);
+
+  @override
+  bool get emailVerified => json['emailVerified'];
 }

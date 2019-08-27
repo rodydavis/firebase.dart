@@ -13,9 +13,9 @@ class FirebaseUser implements FirebaseObject {
 
   String get email => json['email'];
 
-  String get uid => json['idToken'];
+  String get photoUrl => json['photoUrl'];
 
-  String get localId => json['localId'];
+  String get uid => json['localId'];
 
   bool get registered => json['registered'] ?? false;
 
@@ -28,6 +28,22 @@ class FirebaseUser implements FirebaseObject {
   }
 
   bool get isAnonymous => email == null || email.isEmpty;
+
+  bool get isEmailVerified => json['emailVerified'];
+
+  String get passwordHash => json['passwordHash'];
+
+  double get passwordUpdatedAt => json['passwordUpdatedAt'];
+
+  DateTime get validSince => json['validSince'];
+
+  bool get disabled => json['disabled'];
+
+  DateTime get lastLoginAt => json['lastLoginAt'];
+
+  DateTime get createdAt => json['createdAt'];
+
+  bool get customAuth => json['customAuth'];
 }
 
 class ProviderInfo {

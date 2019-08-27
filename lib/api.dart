@@ -17,4 +17,5 @@ part 'src/types/document_snapshot.dart';
 part 'src/types/user/user.dart';
 part 'src/types/user/providers.dart';
 part 'src/types/object.dart';
+part 'src/types/error.dart';
 part 'src/types/reference.dart';
