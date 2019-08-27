@@ -40,15 +40,6 @@ class HomeScreen extends StatelessWidget {
                       );
                     }),
               ),
-              // RaisedButton.icon(
-              //   icon: Icon(Icons.people),
-              //   label: Text('Get Users'),
-              //   onPressed: () => Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (_) => UsesExample(client: _client),
-              //       )),
-              // ),
             ],
           ),
         ),
