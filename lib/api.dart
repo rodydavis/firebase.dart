@@ -14,5 +14,7 @@ part 'src/token.dart';
 part 'src/types/collection_reference.dart';
 part 'src/types/document_reference.dart';
 part 'src/types/document_snapshot.dart';
+part 'src/types/user/user.dart';
+part 'src/types/user/providers.dart';
 part 'src/types/object.dart';
 part 'src/types/reference.dart';

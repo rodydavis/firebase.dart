@@ -35,37 +35,40 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
   @override
   Future login(String email, String password) async {
-    var result = await sendHttpRequest(
-        Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${app.apiKey}'),
-        body: {
-          "email": email,
-          "password": password,
-          "returnSecureToken": true,
-        },
-        needsToken: false);
+    var result = await getJsonMap(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${app.apiKey}',
+      body: {
+        "email": email,
+        "password": password,
+        "returnSecureToken": true,
+      },
+      extract: null,
+      needsToken: false,
+    );
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
+    return;
   }
 
   @override
   Future loginAnonymously() async {
-    var result = await sendHttpRequest(
-        Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}'),
-        body: {
-          "returnSecureToken": true,
-        },
-        needsToken: false);
+    var result = await getJsonMap(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}',
+      body: {
+        "returnSecureToken": true,
+      },
+      extract: null,
+      needsToken: false,
+    );
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
+    return;
   }
 
   @override
   Future signUp(String email, String password) async {
-    var result = await sendHttpRequest(
-        Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}'),
+    var result = await getJsonMap(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${app.apiKey}',
         body: {
           "email": email,
           "password": password,
@@ -74,16 +77,94 @@ abstract class FirestoreHttpClient implements FirestoreClient {
         needsToken: false);
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
+    return;
   }
 
   @override
-  Future<List<String>> fetchProvidersForEmail(String email) {
-    throw "This platform is not supported.";
+  Future<UserProviders> fetchProvidersForEmail(String email) async {
+    final _url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=${app.apiKey}';
+    var result = await getJsonMap(
+      _url,
+      body: {
+        "identifier": email,
+        "continueUri": _url,
+      },
+      extract: null,
+      needsToken: false,
+    );
+
+    return UserProviders(this, result);
   }
 
   @override
-  Future changeEmailForUser(String id, String email) {
-    throw "This platform is not supported.";
+  Future<String> sendPasswordReset(String email) async {
+    final _url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${app.apiKey}';
+
+    var result = await getJsonMap(
+      _url,
+      body: {
+        'requestType': 'PASSWORD_RESET',
+        "identifier": email,
+      },
+      extract: null,
+      needsToken: false,
+    );
+
+    return result['email'];
+  }
+
+  @override
+  Future<String> verifyPasswordResetCode(String code) async {
+    final _url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=${app.apiKey}';
+
+    var result = await getJsonMap(
+      _url,
+      body: {
+        "oobCode": code,
+      },
+      extract: null,
+      needsToken: false,
+    );
+
+    return result['email'];
+  }
+
+  @override
+  Future<String> confirmPasswordReset(String code, String password) async {
+    final _url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=${app.apiKey}';
+
+    var result = await getJsonMap(
+      _url,
+      body: {
+        "oobCode": code,
+        'newPassword': password,
+      },
+      extract: null,
+      needsToken: false,
+    );
+
+    return result['email'];
+  }
+
+  @override
+  Future changeEmailForUser(String id, String email) async {
+    var result = await getJsonMap(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${app.apiKey}',
+      body: {
+        "idToken": id,
+        "email": email,
+        "returnSecureToken": true,
+      },
+      extract: null,
+      needsToken: false,
+    );
+
+    token = FirestoreJsonAccessToken(result, DateTime.now());
+    return;
   }
 
   @override
@@ -93,11 +174,6 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
   @override
   Future confirmEmailVerification(String code) {
-    throw "This platform is not supported.";
-  }
-
-  @override
-  Future confirmPasswordReset(String code, String password) {
     throw "This platform is not supported.";
   }
 
@@ -123,11 +199,6 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future sendPasswordReset(String email) {
-    throw "This platform is not supported.";
-  }
-
-  @override
   Future unlinkProvidersForUser(String id, List<String> providers) {
     throw "This platform is not supported.";
   }
@@ -135,11 +206,6 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   @override
   Future updateProfileForUser(String id,
       {String displayName, String photoUrl}) {
-    throw "This platform is not supported.";
-  }
-
-  @override
-  Future verifyPasswordResetCode(String code) {
     throw "This platform is not supported.";
   }
 
@@ -175,12 +241,19 @@ abstract class FirestoreHttpClient implements FirestoreClient {
     return DocumentSnapshot(this, _asStringKeyedMap(_data));
   }
 
-  Future<Map<String, dynamic>> getJsonMap(String url,
-      {Map<String, dynamic> body,
-      String extract: "response",
-      bool standard: true}) async {
-    return (await sendHttpRequest(_apiUrl(url, standard),
-        body: body, extract: extract)) as Map<String, dynamic>;
+  Future<Map<String, dynamic>> getJsonMap(
+    String url, {
+    Map<String, dynamic> body,
+    String extract: "response",
+    bool standard: true,
+    bool needsToken = true,
+  }) async {
+    return (await sendHttpRequest(
+      _apiUrl(url, standard),
+      body: body,
+      extract: extract,
+      needsToken: needsToken,
+    )) as Map<String, dynamic>;
   }
 
   Future<List<dynamic>> getJsonList(String url,

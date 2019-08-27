@@ -36,8 +36,6 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
 
   String get kind => json['kind'] as String;
 
-  bool get registered => json['registered'] as bool;
-
   int get expiresInSeconds => int.tryParse(json["expiresIn"]);
 
   String get idToken => json['id_token'] as String;

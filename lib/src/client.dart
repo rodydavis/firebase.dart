@@ -20,17 +20,19 @@ abstract class FirestoreClient {
 
   Future signUp(String email, String password);
 
-  Future<List<String>> fetchProvidersForEmail(String email);
+  Future loginAnonymously();
 
-  Future sendPasswordReset(String email);
+  Future<UserProviders> fetchProvidersForEmail(String email);
+
+  Future<String> sendPasswordReset(String email);
+
+  Future<String> verifyPasswordResetCode(String code);
+
+  Future<String> confirmPasswordReset(String code, String password);
 
   Future sendEmailVerificationForUser(String id);
 
-  Future verifyPasswordResetCode(String code);
-
   Future confirmEmailVerification(String code);
-
-  Future confirmPasswordReset(String code, String password);
 
   Future changeEmailForUser(String id, String email);
 
@@ -45,8 +47,6 @@ abstract class FirestoreClient {
   Future deleteUserAccount(String id);
 
   Future linkWithEmailPasswordForUser(String id, String email, String password);
-
-  Future loginAnonymously();
 
   Future<List<DocumentSnapshot>> listDocumentSnapshots(String path);
   Future<DocumentSnapshot> getDocumentSnapshot(String path);

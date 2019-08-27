@@ -74,7 +74,7 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future<List<String>> fetchProvidersForEmail(String email) {
+  Future<UserProviders> fetchProvidersForEmail(String email) {
     throw "This platform is not supported.";
   }
 
@@ -94,7 +94,7 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future confirmPasswordReset(String code, String password) {
+  Future<String> confirmPasswordReset(String code, String password) {
     throw "This platform is not supported.";
   }
 
@@ -120,7 +120,7 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future sendPasswordReset(String email) {
+  Future<String> sendPasswordReset(String email) {
     throw "This platform is not supported.";
   }
 
@@ -136,7 +136,7 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future verifyPasswordResetCode(String code) {
+  Future<String> verifyPasswordResetCode(String code) {
     throw "This platform is not supported.";
   }
 }
