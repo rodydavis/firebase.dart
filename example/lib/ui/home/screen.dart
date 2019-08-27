@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Center(
             child: FutureBuilder<FirebaseUser>(
-          future: client.getCurrentUser(),
+          future: client.getCurrentUser(client.token.idToken),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final _user = snapshot.data;

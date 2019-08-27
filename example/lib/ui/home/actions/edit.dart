@@ -44,7 +44,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             title: RaisedButton(
               child: Text('Save Info'),
               onPressed: () {
-                widget.user.client.updateProfileForUser(
+                widget.user.editInfo(
                   displayName: _name.text,
                   photoUrl: _image.text,
                 );

@@ -32,27 +32,28 @@ abstract class FirestoreClient {
 
   Future<String> confirmPasswordReset(String code, String password);
 
-  Future<String> sendEmailVerificationForUser();
+  Future<String> sendEmailVerificationForUser(String idToken);
 
   Future<String> confirmEmailVerification(String code);
 
-  Future changeEmailForUser(String email);
+  Future changeEmailForUser(String idToken, String email);
 
-  Future changePasswordForUser(String password);
+  Future changePasswordForUser(String idToken, String password);
 
-  Future updateProfileForUser({String displayName, String photoUrl});
+  Future updateProfileForUser(String idToken,
+      {String displayName, String photoUrl});
 
-  Future<List<FirebaseUser>> getUsersForToken();
+  Future<List<FirebaseUser>> getUsersForToken(String idToken);
 
-  Future<FirebaseUser> getUserInfo(String uid);
+  Future<FirebaseUser> getUserInfo(String idToken, String uid);
 
-  Future<FirebaseUser> getCurrentUser();
+  Future<FirebaseUser> getCurrentUser(String idToken);
 
-  Future unlinkProvidersForUser(List<String> providers);
+  Future unlinkProvidersForUser(String idToken, List<String> providers);
 
-  Future deleteUserAccount(String id);
+  Future deleteUserAccount(String idToken);
 
-  Future linkWithEmailPasswordForUser(String id, String email, String password);
+  Future linkWithEmailPasswordForUser(String idToken, String email, String password);
 
   Future<List<DocumentSnapshot>> listDocumentSnapshots(String path);
 

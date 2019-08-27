@@ -44,6 +44,34 @@ class FirebaseUser implements FirebaseObject {
   DateTime get createdAt => json['createdAt'];
 
   bool get customAuth => json['customAuth'];
+
+  Future editInfo({String displayName, String photoUrl}) {
+    return client.updateProfileForUser(
+      client.token.idToken,
+      displayName: displayName,
+      photoUrl: photoUrl,
+    );
+  }
+
+  Future unlinkProviders(List<String> providers) {
+    return client.unlinkProvidersForUser(client.token.idToken, providers);
+  }
+
+  Future<String> sendEmailVerification() {
+    return client.sendEmailVerificationForUser(client.token.idToken);
+  }
+
+  Future changePassword(String password) {
+    return client.changePasswordForUser(client.token.idToken, password);
+  }
+
+  Future changeEmail(String email) {
+    return client.changeEmailForUser(client.token.idToken, email);
+  }
+
+  Future<FirebaseUser> getInfo() {
+    return client.getCurrentUser(client.token.idToken);
+  }
 }
 
 class ProviderInfo {

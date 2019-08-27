@@ -19,11 +19,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   FirestoreAccessToken token;
 
   @override
-  Future changeEmailForUser(String email) async {
+  Future changeEmailForUser(String idToken, String email) async {
     var result = await getJsonMap(
       'https://identitytoolkit.googleapis.com/v1/accounts:update?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "email": email,
         "returnSecureToken": true,
       },
@@ -36,11 +36,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future changePasswordForUser(String password) async {
+  Future changePasswordForUser(String idToken, String password) async {
     var result = await getJsonMap(
       'https://identitytoolkit.googleapis.com/v1/accounts:update?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "password": password,
         "returnSecureToken": true,
       },
@@ -127,11 +127,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future<FirebaseUser> getCurrentUser() async {
+  Future<FirebaseUser> getCurrentUser(String idToken) async {
     var result = await getJsonList(
       'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "returnSecureToken": true,
       },
       extract: 'users',
@@ -155,11 +155,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future<FirebaseUser> getUserInfo(String uid) async {
+  Future<FirebaseUser> getUserInfo(String idToken, String uid) async {
     var result = await getJsonList(
       'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "returnSecureToken": true,
       },
       extract: 'users',
@@ -177,13 +177,13 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future<List<FirebaseUser>> getUsersForToken() async {
+  Future<List<FirebaseUser>> getUsersForToken(String idToken) async {
     var list = <FirebaseUser>[];
 
     var result = await getJsonList(
       'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "returnSecureToken": true,
       },
       extract: 'users',
@@ -265,11 +265,11 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future<String> sendEmailVerificationForUser() async {
+  Future<String> sendEmailVerificationForUser(String idToken) async {
     var result = await getJsonMap(
       'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "requestType": 'VERIFY_EMAIL',
       },
       extract: null,
@@ -310,17 +310,18 @@ abstract class FirestoreHttpClient implements FirestoreClient {
 
     token = FirestoreJsonAccessToken(result, DateTime.now());
     if (displayName != null || photoUrl != null) {
-      await updateProfileForUser(displayName: displayName, photoUrl: photoUrl);
+      await updateProfileForUser(token.idToken,
+          displayName: displayName, photoUrl: photoUrl);
     }
     return;
   }
 
   @override
-  Future unlinkProvidersForUser(List<String> providers) async {
+  Future unlinkProvidersForUser(String idToken, List<String> providers) async {
     var result = await getJsonMap(
       'https://identitytoolkit.googleapis.com/v1/accounts:update?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         "deleteProvider": providers,
       },
       extract: null,
@@ -330,11 +331,12 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  Future updateProfileForUser({String displayName, String photoUrl}) async {
+  Future updateProfileForUser(String idToken,
+      {String displayName, String photoUrl}) async {
     var result = await getJsonMap(
       'https://identitytoolkit.googleapis.com/v1/accounts:update?key=${app.apiKey}',
       body: {
-        "idToken": token.idToken,
+        "idToken": idToken,
         if (displayName != null) ...{
           'displayName': displayName,
         },
