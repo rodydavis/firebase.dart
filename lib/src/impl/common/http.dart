@@ -31,7 +31,7 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
-  bool get isAuthorized => isCurrentTokenValid(true);
+  bool get isAuthorized => isCurrentTokenValid(false);
 
   @override
   Future login(String email, String password) async {

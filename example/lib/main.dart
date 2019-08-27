@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:example/creds.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_rest_api/api.dart';
@@ -42,142 +44,152 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          if (_client != null)
-            IconButton(
-              icon: Icon(Icons.exit_to_app),
-              onPressed: () {
-                if (mounted)
-                  setState(() {
-                    _client = null;
-                  });
-              },
-            )
-        ],
-      ),
-      body: Builder(
-        builder: (_) {
-          final client = FirestoreClient(firebaseApp);
-          if (_client == null || !_client.isAuthorized) {
-            return Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        decoration:
-                            InputDecoration(filled: true, hintText: 'Username'),
-                        onSaved: (val) => _username = val,
-                        validator: (val) =>
-                            val.isEmpty ? 'Username Required' : null,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        decoration:
-                            InputDecoration(filled: true, hintText: 'Password'),
-                        onSaved: (val) => _password = val,
-                        validator: (val) =>
-                            val.isEmpty ? 'Password Required' : null,
-                        obscureText: true,
-                      ),
-                    ),
-                    if (!_loading) ...[
-                      Flex(
-                        direction: Axis.horizontal,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          RaisedButton(
-                            child: Text('Login'),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _setLoding(true);
-                                try {
-                                  await client.login(_username, _password);
-                                } catch (e) {
-                                  print('Error => $e');
-                                }
-                                _checkClient(client);
-                              }
-                            },
-                          ),
-                          RaisedButton(
-                            child: Text('SignUp'),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _setLoding(true);
-                                try {
-                                  await client.signUp(_username, _password);
-                                } catch (e) {
-                                  print('Error => $e');
-                                }
-                                _checkClient(client);
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                      FlatButton(
-                        child: Text('Guest Login'),
-                        onPressed: () async {
-                          _setLoding(true);
-                          try {
-                            await client.loginAnonymously();
-                          } catch (e) {
-                            print('Error => $e');
-                          }
-                          _checkClient(client);
-                        },
-                      ),
-                    ],
-                    if (_loading) ...[CircularProgressIndicator()],
-                  ],
-                ),
-              ),
-            );
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: <Widget>[
+            if (_client != null)
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  if (mounted)
+                    setState(() {
+                      _client = null;
+                    });
+                },
+              )
+          ],
+        ),
+        body: Builder(builder: (_) {
+          if (_client != null && _client.isAuthorized) {
+            // print('Token: ${_client.token.idToken}');
+            return _buildHome(context);
           }
 
-          return SafeArea(
-            child: Center(
-              child: Column(
+          final client = FirestoreClient(firebaseApp);
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: _buildLogin(client),
+          );
+        }));
+  }
+
+  Widget _buildHome(BuildContext context) {
+    return SafeArea(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: FutureBuilder<FirebaseUser>(
+                  future: _client.getCurrentUser(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+                      String prettyprint = encoder.convert(snapshot.data.json);
+                      debugPrint(prettyprint);
+                      return Center(
+                          child: Text(
+                        prettyprint,
+                      ));
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
+            ),
+            // RaisedButton.icon(
+            //   icon: Icon(Icons.people),
+            //   label: Text('Get Users'),
+            //   onPressed: () => Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (_) => UsesExample(client: _client),
+            //       )),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogin(FirestoreClient client) {
+    return Center(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(filled: true, hintText: 'Username'),
+                onSaved: (val) => _username = val,
+                validator: (val) => val.isEmpty ? 'Username Required' : null,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(filled: true, hintText: 'Password'),
+                onSaved: (val) => _password = val,
+                validator: (val) => val.isEmpty ? 'Password Required' : null,
+                obscureText: true,
+              ),
+            ),
+            Container(height: 50),
+            if (!_loading) ...[
+              Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Expanded(
-                    child: FutureBuilder<FirebaseUser>(
-                        future: client.getCurrentUser(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Center(
-                                child: Text(
-                              snapshot.data.json.toString(),
-                            ));
-                          }
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }),
+                  RaisedButton(
+                    child: Text('Login'),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        _setLoding(true);
+                        try {
+                          await client.login(_username, _password);
+                        } catch (e) {
+                          print('Error => $e');
+                        }
+                        _checkClient(client);
+                      }
+                    },
                   ),
-                  RaisedButton.icon(
-                    icon: Icon(Icons.people),
-                    label: Text('Get Users'),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => UsesExample(client: _client),
-                        )),
+                  RaisedButton(
+                    child: Text('SignUp'),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        _setLoding(true);
+                        try {
+                          await client.signUp(_username, _password);
+                        } catch (e) {
+                          print('Error => $e');
+                        }
+                        _checkClient(client);
+                      }
+                    },
                   ),
                 ],
               ),
-            ),
-          );
-        },
+              Container(height: 20),
+              FlatButton(
+                child: Text('Guest Login'),
+                onPressed: () async {
+                  _setLoding(true);
+                  try {
+                    await client.loginAnonymously();
+                  } catch (e) {
+                    print('Error => $e');
+                  }
+                  _checkClient(client);
+                },
+              ),
+            ],
+            if (_loading) ...[CircularProgressIndicator()],
+          ],
+        ),
       ),
     );
   }

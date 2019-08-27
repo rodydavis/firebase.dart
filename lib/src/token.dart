@@ -50,7 +50,7 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   String get kind => json['kind'] as String;
 
   @override
-  String get idToken => json['id_token'] as String;
+  String get idToken => json['idToken'];
 
   @override
   String get localId => json['localId'] as String;
