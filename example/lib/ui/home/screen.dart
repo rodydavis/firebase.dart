@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:firebase_rest_api/api.dart';
 import 'package:flutter/material.dart';
 
+import 'actions/edit.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     Key key,
@@ -19,30 +21,44 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: FutureBuilder<FirebaseUser>(
-                    future: client.getCurrentUser(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-                        String prettyprint =
-                            encoder.convert(snapshot.data.json);
-                        debugPrint(prettyprint);
-                        return Center(
-                            child: Text(
-                          prettyprint,
-                        ));
+            child: FutureBuilder<FirebaseUser>(
+          future: client.getCurrentUser(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final _user = snapshot.data;
+              JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+              String prettyprint = encoder.convert(_user.json);
+              debugPrint(prettyprint);
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                      prettyprint,
+                    )),
+                  ),
+                  FlatButton(
+                    child: Text('Edit Info'),
+                    onPressed: () async {
+                      final _valid = await Navigator.push<bool>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => EditInfoScreen(user: _user),
+                            fullscreenDialog: true,
+                          ));
+                      if (_valid != null && _valid) {
+                        Navigator.pop(context);
                       }
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }),
-              ),
-            ],
-          ),
-        ),
+                    },
+                  ),
+                ],
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        )),
       ),
     );
   }
