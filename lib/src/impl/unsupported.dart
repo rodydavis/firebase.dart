@@ -104,7 +104,8 @@ class FirestoreClientImpl implements FirestoreClient {
   }
 
   @override
-  Future linkWithEmailPasswordForUser(String id, String email, String password) {
+  Future linkWithEmailPasswordForUser(
+      String id, String email, String password) {
     throw "This platform is not supported.";
   }
 
@@ -140,6 +141,11 @@ class FirestoreClientImpl implements FirestoreClient {
 
   @override
   Future<FirebaseUser> getUserInfo(String uid) {
+    throw "This platform is not supported.";
+  }
+
+  @override
+  Future<FirebaseUser> getCurrentUser() {
     throw "This platform is not supported.";
   }
 }

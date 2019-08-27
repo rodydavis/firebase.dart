@@ -1,8 +1,7 @@
 part of firebase_rest_api;
 
 abstract class FirestoreAccessToken {
-  String get accessToken;
-
+  
   String get refreshToken;
 
   DateTime get createdAt;
@@ -30,9 +29,6 @@ class FirestoreJsonAccessToken extends FirestoreAccessToken {
   FirestoreJsonAccessToken(this.json, this.createdAt);
 
   final Map<String, dynamic> json;
-
-  @override
-  String get accessToken => json["idToken"] as String;
 
   @override
   String get refreshToken => json["refresh_token"];

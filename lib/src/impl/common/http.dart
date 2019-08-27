@@ -254,6 +254,28 @@ abstract class FirestoreHttpClient implements FirestoreClient {
   }
 
   @override
+  Future<FirebaseUser> getCurrentUser() async {
+    var result = await getJsonList(
+      'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${app.apiKey}',
+      body: {
+        "idToken": token.idToken,
+        "returnSecureToken": true,
+      },
+      extract: 'users',
+      needsToken: false,
+    );
+
+    if (result != null)
+      for (var item in result) {
+        final _user = FirebaseUser(this, item);
+        if (_user.uid == token.localId) {
+          return _user;
+        }
+      }
+    return null;
+  }
+
+  @override
   Future linkWithEmailPasswordForUser(
       String id, String email, String password) async {
     var result = await getJsonMap(

@@ -89,21 +89,41 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     if (!_loading) ...[
-                      RaisedButton.icon(
-                        icon: Icon(Icons.account_circle),
-                        label: Text('Login'),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
-                            _setLoding(true);
-                            try {
-                              await client.login(_username, _password);
-                            } catch (e) {
-                              print('Error => $e');
-                            }
-                            _checkClient(client);
-                          }
-                        },
+                      Flex(
+                        direction: Axis.horizontal,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Text('Login'),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                _setLoding(true);
+                                try {
+                                  await client.login(_username, _password);
+                                } catch (e) {
+                                  print('Error => $e');
+                                }
+                                _checkClient(client);
+                              }
+                            },
+                          ),
+                          RaisedButton(
+                            child: Text('SignUp'),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                _setLoding(true);
+                                try {
+                                  await client.signUp(_username, _password);
+                                } catch (e) {
+                                  print('Error => $e');
+                                }
+                                _checkClient(client);
+                              }
+                            },
+                          ),
+                        ],
                       ),
                       FlatButton(
                         child: Text('Guest Login'),
@@ -125,20 +145,36 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }
 
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton.icon(
-                  icon: Icon(Icons.people),
-                  label: Text('Get Users'),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => UsesExample(client: _client),
-                      )),
-                ),
-              ],
+          return SafeArea(
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: FutureBuilder<FirebaseUser>(
+                        future: client.getCurrentUser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Center(
+                                child: Text(
+                              snapshot.data.json.toString(),
+                            ));
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }),
+                  ),
+                  RaisedButton.icon(
+                    icon: Icon(Icons.people),
+                    label: Text('Get Users'),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => UsesExample(client: _client),
+                        )),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -149,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _checkClient(FirestoreClient client) {
     try {
       if (mounted && client != null) {
-        print('token: ${client?.token?.accessToken}');
+        // print('token: ${client?.token?.accessToken}');
         _client = client;
       }
     } on Exception catch (e) {

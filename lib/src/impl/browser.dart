@@ -20,7 +20,7 @@ class FirestoreClientImpl extends FirestoreHttpClient {
     var request = new HttpRequest();
     request.open(body == null ? "GET" : "POST", uri.toString());
     if (needsToken) {
-      request.setRequestHeader("Authorization", "Bearer ${token.accessToken}");
+      // request.setRequestHeader("Authorization", "Bearer ${token.accessToken}");
     }
 
     if (body != null) {

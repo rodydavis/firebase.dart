@@ -45,6 +45,8 @@ abstract class FirestoreClient {
 
   Future<FirebaseUser> getUserInfo(String uid);
 
+  Future<FirebaseUser> getCurrentUser();
+
   Future unlinkProvidersForUser(List<String> providers);
 
   Future deleteUserAccount(String id);

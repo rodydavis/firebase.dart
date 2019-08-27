@@ -38,7 +38,7 @@ class FirestoreClientImpl extends FirestoreHttpClient {
         body == null ? await client.getUrl(uri) : await client.postUrl(uri);
     request.headers.set("User-Agent", "Firestore.dart");
     if (needsToken) {
-      request.headers.add("Authorization", "Bearer ${token.accessToken}");
+      // request.headers.add("Authorization", "Bearer ${token.accessToken}");
     }
     if (body != null) {
       request.headers.contentType = _jsonContentType;
