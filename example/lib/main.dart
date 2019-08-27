@@ -1,3 +1,4 @@
+import 'package:example/creds.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_rest_api/api.dart';
 
@@ -24,18 +25,6 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
-const _app = App(
-  // apiKey: 'FIREBASE_API_KEY',
-  // projectId: 'project-id',
-  apiKey: "AIzaSyCCAEs_QDl-bKQ5ZZx0MjdPk6XqsSsEsx0",
-  authDomain: "sandbox-79509.firebaseapp.com",
-  databaseURL: "https://sandbox-79509.firebaseio.com",
-  projectId: "sandbox-79509",
-  storageBucket: "",
-  messagingSenderId: "143797816149",
-  appId: "1:143797816149:web:5d85373aa91d436f",
-);
 
 class _MyHomePageState extends State<MyHomePage> {
   FirestoreClient _client;
@@ -70,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Builder(
         builder: (_) {
-          final client = FirestoreClient(_app);
+          final client = FirestoreClient(firebaseApp);
           if (_client == null || !_client.isAuthorized) {
             return Center(
               child: Form(
